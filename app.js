@@ -46,7 +46,7 @@ let client = new Client({
             '--single-process',
             '--disable-gpu'
         ],
-        executablePath: process.env.CHROME_BIN || null
+        // executablePath: process.env.CHROME_BIN || null
     },
     webVersionCache: {
         type: "remote",
