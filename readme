@@ -1,0 +1,18 @@
+Para deploy:
+
+heroku buildpacks:add --index 1 heroku-community/apt -a NOMBRE_DE_TU_APP         
+
+
+heroku run bash -a NOMBRE_DE_TU_APP
+find /app -name "google-chrome-stable"
+
+
+comentar y descomentar la linea 49 de app.js
+
+   // executablePath: process.env.CHROME_BIN || null
+
+
+Investigando si se necesita esto:
+
+
+heroku config:set CHROME_BIN=/app/.apt/usr/bin/google-chrome-stable -a NOMBRE_DE_TU_APP
