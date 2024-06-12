@@ -16,3 +16,7 @@ Investigando si se necesita esto:
 
 
 heroku config:set CHROME_BIN=/app/.apt/usr/bin/google-chrome-stable -a NOMBRE_DE_TU_APP
+
+
+
+heroku logs --app NOMBRE_DE_TU_APP

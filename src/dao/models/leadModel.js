@@ -2,8 +2,7 @@ import mongoose from 'mongoose';
 
 const leadSchema = new mongoose.Schema({
   name: {
-    type: String,
-    unique: true,
+    type: String
   },
   chatId: {
     type: String,
