@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Generator</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@latest/build/qrcode.min.js"></script>
+</head>
+
+<body class="bg-light">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <h1 class="my-4">Escanear</h1>
+        <div class="card p-4">
+          <canvas id="canvas" class="mb-4"></canvas>
+          <button id="refreshButton" class="btn btn-primary">Refresh</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const qrText = `<%= qrText %>`;
+
+    QRCode.toCanvas(document.getElementById('canvas'), qrText, { toSJISFunc: QRCode.toSJIS }, function (error) {
+      if (error) console.error(error)
+      console.log('success!')
+    });
+
+    document.getElementById('refreshButton').addEventListener('click', async () => {
+      try {
+        await fetch('/shutdown');
+        location.reload();
+      } catch (error) {
+        console.error('Error refreshing QR code:', error);
+      }
+    });
+  </script>
+</body>
+
+</html>
