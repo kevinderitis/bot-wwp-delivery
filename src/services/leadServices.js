@@ -19,11 +19,7 @@ export const createResponse = async chatId => {
             let clientData = await getNextClient();
             await createLeadService(chatId, clientData.phoneNumber);
             number = clientData.phoneNumber;
-            text = `¡Hola! 👋
-            ¿Estas listo para jugar? 
-            Para darte la mejor atención, tenés un cajero personal para hablar con vos. 
-            Acá te envío el numero. 
-            ¡Mucha suerte! 🍀`;
+            text = `¡Hola! 👋 ¿Estas listo para jugar? Para darte la mejor atención, tenés un cajero personal para hablar con vos. Acá te envío el numero. ¡Mucha suerte! 🍀`;
         }
 
         response = {
