@@ -62,8 +62,11 @@ const sendMessageClient = async (myClient, chatId, response, contact) => {
     if (lastMessageChatId === chatId) {
         console.log("Ya se envió un mensaje a este número anteriormente. Evitando enviar otro.");
         return;
-    }else{
-        myClient.sendMessage(chatId, response);
+    } else {
+        let response = await createRsponse(chatId);
+        const contact = await client.getContactById(response.formated);
+
+        myClient.sendMessage(chatId, response.text);
         lastMessageChatId = chatId;
         setTimeout(async () => {
             await myClient.sendMessage(chatId, contact);
@@ -83,9 +86,6 @@ const initializeClient = () => {
 
     client.on('message', async msg => {
         let chatId = msg.from;
-        let response = await createResponse(chatId);
-        const contact = await client.getContactById(response.formated);
-
         await sendMessageClient(client, chatId, response.text, contact);
 
     });
