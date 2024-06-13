@@ -57,6 +57,20 @@ let client = new Client({
 
 let lastMessageChatId = "";
 
+
+const sendMessageClient = async (myClient, chatId, response, contact) => {
+    if (lastMessageChatId === chatId) {
+        console.log("Ya se envió un mensaje a este número anteriormente. Evitando enviar otro.");
+        return;
+    }else{
+        myClient.sendMessage(chatId, response);
+        lastMessageChatId = chatId;
+        setTimeout(async () => {
+            await myClient.sendMessage(chatId, contact);
+        }, 2000);
+    }
+}
+
 const initializeClient = () => {
     client.on('qr', (qr) => {
         qrData = qr;
@@ -69,20 +83,10 @@ const initializeClient = () => {
 
     client.on('message', async msg => {
         let chatId = msg.from;
-
-        if (lastMessageChatId === chatId) {
-            console.log("Ya se envió un mensaje a este número anteriormente. Evitando enviar otro.");
-            return;
-        }
-
         let response = await createResponse(chatId);
         const contact = await client.getContactById(response.formated);
 
-        client.sendMessage(chatId, response.text);
-        lastMessageChatId = chatId;
-        setTimeout(async () => {
-            await client.sendMessage(chatId, contact);
-        }, 2000);
+        await sendMessageClient(client, chatId, response.text, contact);
 
     });
 
