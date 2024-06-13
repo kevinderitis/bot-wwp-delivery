@@ -14,12 +14,16 @@ export const createResponse = async chatId => {
         let lead = await getLeadByChatId(chatId);
         if (lead) {
             number = lead.clientPhone;
-            text = 'Veo que ya te comunicaste anteriormente. Te envio el contacto de tu cajero para que te pongas en contacto con el';
+            text = 'Veo que ya te comunicaste anteriormente. Te envio el contacto de tu cajero para que te pongas en contacto.';
         } else {
             let clientData = await getNextClient();
             await createLeadService(chatId, clientData.phoneNumber);
             number = clientData.phoneNumber;
-            text = 'Buenas! te paso el contacto de tu cajero oficial asignado. Escribile ahora para generar el usuario y empezar a jugar.';
+            text = `¡Hola! 👋
+            ¿Estas listo para jugar? 
+            Para darte la mejor atención, tenés un cajero personal para hablar con vos. 
+            Acá te envío el numero. 
+            ¡Mucha suerte! 🍀`;
         }
 
         response = {
