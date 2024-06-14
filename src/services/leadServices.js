@@ -11,6 +11,7 @@ export const createResponse = async chatId => {
     let response;
     let text;
     try {
+        console.log(`Buscando lead chatId:  ${chatId}`);
         let lead = await getLeadByChatId(chatId);
         if (lead) {
             number = lead.clientPhone;
@@ -30,9 +31,7 @@ export const createResponse = async chatId => {
 
         return response;
     } catch (error) {
-        console.log(error)
-        number = 'Lo siento, hubo un problema al procesar tu solicitud. Por favor, intenta nuevamente más tarde.';
-        return number;
+        throw error;
     }
 
 }
@@ -42,6 +41,6 @@ export const createLeadService = async (chatId, clientPhone) => {
         let newLead = await createLead(chatId, clientPhone);
         return newLead;
     } catch (error) {
-        console.log(error)
+        throw error;
     }
 }

@@ -59,20 +59,29 @@ let lastMessageChatId = "";
 
 
 const sendMessageClient = async (myClient, chatId) => {
-    if (lastMessageChatId === chatId) {
-        console.log("Ya se envió un mensaje a este número anteriormente. Evitando enviar otro.");
-        return;
-    } else {
-        let response = await createResponse(chatId);
-        const contact = await myClient.getContactById(response.formated);
+    try {
+        if (lastMessageChatId === chatId) {
+            console.log("Ya se envió un mensaje a este número anteriormente. Evitando enviar otro.");
+            return;
+        } else {
+            let response = await createResponse(chatId);
+            const contact = await myClient.getContactById(response.formated);
 
-        myClient.sendMessage(chatId, response.text);
-        lastMessageChatId = chatId;
-        setTimeout(async () => {
-            await myClient.sendMessage(chatId, contact);
-        }, 2000);
+            await myClient.sendMessage(chatId, response.text);
+            lastMessageChatId = chatId;
+
+            setTimeout(async () => {
+                try {
+                    await myClient.sendMessage(chatId, contact);
+                } catch (error) {
+                    console.error("Error al enviar el contacto:", error);
+                }
+            }, 2000);
+        }
+    } catch (error) {
+        throw error;
     }
-}
+};
 
 const initializeClient = () => {
     client.on('qr', (qr) => {
@@ -84,10 +93,13 @@ const initializeClient = () => {
         console.log('Client is ready!');
     });
 
-    client.on('message', async msg => {
-        let chatId = msg.from;
-        await sendMessageClient(client, chatId);
-
+    client.on('message', async (msg) => {
+        try {
+            let chatId = msg.from;
+            await sendMessageClient(client, chatId);
+        } catch (error) {
+            console.error("Error al procesar el mensaje:", error);
+        }
     });
 
     client.initialize();
