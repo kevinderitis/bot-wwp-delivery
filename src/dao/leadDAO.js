@@ -40,7 +40,6 @@ const getAllLeads = async filter => {
       ? await Lead.find({ clientPhone: { $regex: new RegExp(filter.trim(), 'i') } }).sort({ createdAt: -1 })
       : await Lead.find().sort({ createdAt: -1 });
 
-    console.log('Leads encontrados:', filteredLeads);
     return filteredLeads;
   } catch (error) {
     console.error('Error al obtener leads:', error.message);
