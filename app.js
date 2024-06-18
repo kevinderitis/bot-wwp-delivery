@@ -7,6 +7,7 @@ import ejs from 'ejs';
 import { getLeadByChatId, updateLeadByChatId, updateLeadById } from './src/dao/leadDAO.js';
 import { getNextClient } from './src/services/clientServices.js';
 import { sendSlackMessage } from './src/services/slackServices.js';
+import sendContactEventToFacebook from './src/services/facebookServices.js';
 
 const { Client, MessageMedia } = pkg;
 
@@ -135,6 +136,7 @@ const initializeClient = () => {
                 if (lead) {
                     let clientData = await sendWelcomeMessage(client, chatId);
                     await sendContact(client, chatId);
+                    // await sendContactEventToFacebook(chatId);
                     // await sendLeadToClient(client, clientData.phoneNumber, chatId);
                 }
             }
@@ -185,6 +187,15 @@ app.get('/leads', async (req, res) => {
     try {
         let leads = await getLeads(filter);
         res.render('leads-view', { leads });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
+app.get('/leads/all', async (req, res) => {
+    try {
+        let leads = await getLeads();
+        res.send(leads);
     } catch (error) {
         res.status(500).send(error);
     }
