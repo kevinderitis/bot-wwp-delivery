@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leads</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <h1 class="my-4">Lista de Leads</h1>
+        <div class="card p-4">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="filterInput" placeholder="Filtrar por numero cliente">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" id="filterButton">Filtrar</button>
+            </div>
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Chat ID</th>
+                <th>Client Phone</th>
+                <th>Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% leads.forEach(lead=> { %>
+                <tr>
+                  <td>
+                    <%= lead.chatId %>
+                  </td>
+                  <td>
+                    <%= lead.clientPhone %>
+                  </td>
+                  <td>
+                    <%= new Date(lead.createdAt).toLocaleString() %>
+                  </td>
+                </tr>
+                <% }) %>
+            </tbody>
+          </table>
+          <button id="refreshButton" class="btn btn-primary">Todos</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const filterInput = document.getElementById('filterInput');
+    const filterButton = document.getElementById('filterButton');
+    const refreshButton = document.getElementById('refreshButton');
+
+    filterButton.addEventListener('click', () => {
+      const filterNumber = filterInput.value.toLowerCase();
+
+      const redirectURL = `/leads?filter=${filterNumber}`;
+
+      window.location.href = redirectURL;
+
+    });
+
+    refreshButton.addEventListener('click', () => {
+      const redirectURL = `/leads`;
+
+      window.location.href = redirectURL;
+    });
+  </script>
+</body>
+
+</html>

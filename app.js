@@ -2,8 +2,10 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import pkg from 'whatsapp-web.js';
-import { createResponse } from './src/services/leadServices.js';
+import { createLeadService, createResponse, formatNumber, getLeads } from './src/services/leadServices.js';
 import ejs from 'ejs';
+import { getLeadByChatId, updateLeadByChatId, updateLeadById } from './src/dao/leadDAO.js';
+import { getNextClient } from './src/services/clientServices.js';
 
 const { Client, MessageMedia } = pkg;
 
@@ -57,26 +59,31 @@ let client = new Client({
 
 let lastMessageChatId = "";
 
+const welcomeText = `¡Hola! 👋 ¿Estas listo para jugar? Para darte la mejor atención, tenés un cajero personal para hablar con vos. Acá te envío el numero. ¡Mucha suerte! 🍀`;
 
-const sendMessageClient = async (myClient, chatId) => {
+const sendWelcomeMessage = async (myClient, chatId) => {
     try {
-        if (lastMessageChatId === chatId) {
-            console.log("Ya se envió un mensaje a este número anteriormente. Evitando enviar otro.");
-            return;
-        } else {
-            let response = await createResponse(chatId);
-            const contact = await myClient.getContactById(response.formated);
-
-            await myClient.sendMessage(chatId, response.text);
+        let clientData;
+        let lead = await getLeadByChatId(chatId);
+        if (lead && lead.status === 'pending') {
+            clientData = await getNextClient();
+            await updateLeadByChatId(chatId, 'sent', clientData.phoneNumber);
+            await myClient.sendMessage(chatId, welcomeText);
             lastMessageChatId = chatId;
 
-            setTimeout(async () => {
-                try {
-                    await myClient.sendMessage(chatId, contact);
-                } catch (error) {
-                    console.error("Error al enviar el contacto:", error);
-                }
-            }, 2000);
+        }
+    } catch (error) {
+        throw error;
+    }
+};
+
+const sendContact = async (myClient, chatId) => {
+    try {
+        let lead = await getLeadByChatId(chatId);
+        if (lead) {
+            let formatedNumber = formatNumber(lead.clientPhone);
+            const contact = await myClient.getContactById(formatedNumber);
+            await myClient.sendMessage(chatId, contact);
         }
     } catch (error) {
         throw error;
@@ -96,7 +103,15 @@ const initializeClient = () => {
     client.on('message', async (msg) => {
         try {
             let chatId = msg.from;
-            await sendMessageClient(client, chatId);
+            console.log(`Se recibio mensaje de ${chatId}`);
+            if (lastMessageChatId === chatId) {
+                console.log("Ya se envió un mensaje a este número anteriormente. Evitando enviar otro.");
+                return;
+            } else {
+                await createLeadService(chatId);
+                await sendWelcomeMessage(client, chatId);
+                await sendContact(client, chatId);
+            }
         } catch (error) {
             console.error("Error al procesar el mensaje:", error);
         }
@@ -138,3 +153,13 @@ app.get('/shutdown', async (req, res) => {
         res.status(500).send('Error shutting down client');
     }
 });
+
+app.get('/leads', async (req, res) => {
+    let filter = req.query ? req.query.filter : '';
+    try {
+        let leads = await getLeads(filter);
+        res.render('leads-view', { leads });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})

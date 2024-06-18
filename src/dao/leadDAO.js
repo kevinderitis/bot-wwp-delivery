@@ -34,11 +34,14 @@ const createLead = async (chatId, clientPhone) => {
 
 
 
-const getAllLeads = async () => {
+const getAllLeads = async filter => {
   try {
-    const leads = await Lead.find();
-    console.log('Leads encontrados:', leads);
-    return leads;
+    const filteredLeads = filter && filter.trim()
+      ? await Lead.find({ clientPhone: { $regex: new RegExp(filter.trim(), 'i') } }).sort({ createdAt: -1 })
+      : await Lead.find().sort({ createdAt: -1 });
+
+    console.log('Leads encontrados:', filteredLeads);
+    return filteredLeads;
   } catch (error) {
     console.error('Error al obtener leads:', error.message);
     throw new Error('No se pudieron obtener los leads');
@@ -129,6 +132,28 @@ const updateLeadStatusByChatId = async (chatId, status) => {
   }
 };
 
+const updateLeadByChatId = async (chatId, status, newClientPhone) => {
+  try {
+    const lead = await Lead.findOne({ chatId });
+
+    if (!lead) {
+      throw new Error('Lead no encontrado');
+    }
+
+    lead.status = status;
+    lead.clientPhone = newClientPhone;
+
+    await lead.save();
+
+    console.log('Lead actualizado:', lead);
+    return lead;
+  } catch (error) {
+    console.error('Error al actualizar lead por chatId:', error.message);
+    throw new Error('No se pudo actualizar el lead');
+  }
+};
+
+
 const updateLeadByMainThreadId = async (chatId, threadId) => {
   try {
     const lead = await Lead.findOne({ chatId });
@@ -179,4 +204,4 @@ const updateManyPayments = async hour => {
   }
 };
 
-export { createLead, getAllLeads, getLeadById, updateLeadById, deleteLeadById, getLeadByChatId, updateLeadPaymentByChatId, updateLeadByMainThreadId, updateManyPayments, updateLeadStatusByChatId };
+export { createLead, getAllLeads, getLeadById, updateLeadById, deleteLeadById, getLeadByChatId, updateLeadPaymentByChatId, updateLeadByMainThreadId, updateManyPayments, updateLeadStatusByChatId, updateLeadByChatId };

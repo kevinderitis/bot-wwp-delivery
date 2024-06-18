@@ -1,8 +1,8 @@
-import { getLeadByChatId, createLead } from "../dao/leadDAO.js";
+import { getLeadByChatId, createLead, getAllLeads } from "../dao/leadDAO.js";
 import { getNextClient } from "./clientServices.js";
 
 
-const formatNumber = number => {
+export const formatNumber = number => {
     return `${number}@c.us`;
 }
 
@@ -40,6 +40,15 @@ export const createLeadService = async (chatId, clientPhone) => {
     try {
         let newLead = await createLead(chatId, clientPhone);
         return newLead;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const getLeads = async filter => {
+    try {
+        let leads = await getAllLeads(filter);
+        return leads;
     } catch (error) {
         throw error;
     }
