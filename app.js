@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import pkg from 'whatsapp-web.js';
+import moment from 'moment-timezone';
 import { createLeadService, createResponse, formatNumber, getLeads } from './src/services/leadServices.js';
 import ejs from 'ejs';
 import { getLeadByChatId, updateLeadByChatId, updateLeadById } from './src/dao/leadDAO.js';
@@ -195,7 +196,15 @@ app.get('/leads', async (req, res) => {
 app.get('/leads/all', async (req, res) => {
     try {
         let leads = await getLeads();
-        res.send(leads);
+
+        let mappedLeads = leads.map(lead => ({
+            chatId: lead.chatId,
+            status: lead.status,
+            clientPhone: lead.clientPhone,
+            createdAt: moment.utc(lead.createdAt).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss')
+        }));
+
+        res.send(mappedLeads);
     } catch (error) {
         res.status(500).send(error);
     }
