@@ -73,6 +73,7 @@ const sendWelcomeMessage = async (myClient, chatId) => {
             lastMessageChatId = chatId;
 
         }
+        return clientData;
     } catch (error) {
         throw error;
     }
@@ -88,6 +89,16 @@ const sendContact = async (myClient, chatId) => {
         }
     } catch (error) {
         throw error;
+    }
+};
+
+const sendLeadToClient = async (myClient, clientPhone, chatId) => {
+    try {
+        const lead = await myClient.getContactById(chatId);
+        let clientPhoneFormated = formatNumber(clientPhone);
+        await myClient.sendMessage(clientPhoneFormated, lead);
+    } catch (error) {
+        console.log(error);
     }
 };
 
@@ -122,8 +133,9 @@ const initializeClient = () => {
             } else {
                 let lead = await createLeadService(chatId);
                 if (lead) {
-                    await sendWelcomeMessage(client, chatId);
+                    let clientData = await sendWelcomeMessage(client, chatId);
                     await sendContact(client, chatId);
+                    // await sendLeadToClient(client, clientData.phoneNumber, chatId);
                 }
             }
         } catch (error) {
