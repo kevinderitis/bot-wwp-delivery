@@ -6,6 +6,7 @@ import { createLeadService, createResponse, formatNumber, getLeads } from './src
 import ejs from 'ejs';
 import { getLeadByChatId, updateLeadByChatId, updateLeadById } from './src/dao/leadDAO.js';
 import { getNextClient } from './src/services/clientServices.js';
+import { sendSlackMessage } from './src/services/slackServices.js';
 
 const { Client, MessageMedia } = pkg;
 
@@ -98,6 +99,17 @@ const initializeClient = () => {
 
     client.on('ready', () => {
         console.log('Client is ready!');
+    });
+
+    client.on('disconnected', async (reason) => {
+        console.log('Cliente desconectado:', reason);
+        const myNumber = client.info.wid._serialized;
+        if (reason === 'TOS_BLOCK' || reason === 'SMB_TOS_BLOCK') {
+            await sendSlackMessage(`Numero ${myNumber} bloqueado!`);
+        }else{
+            await sendSlackMessage(`Numero ${myNumber} desconectado!`);
+        }
+
     });
 
     client.on('message', async (msg) => {
