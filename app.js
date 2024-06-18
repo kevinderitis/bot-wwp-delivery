@@ -106,7 +106,7 @@ const initializeClient = () => {
         const myNumber = client.info.wid._serialized;
         if (reason === 'TOS_BLOCK' || reason === 'SMB_TOS_BLOCK') {
             await sendSlackMessage(`Numero ${myNumber} bloqueado!`);
-        }else{
+        } else {
             await sendSlackMessage(`Numero ${myNumber} desconectado!`);
         }
 
@@ -120,9 +120,11 @@ const initializeClient = () => {
                 console.log("Ya se envió un mensaje a este número anteriormente. Evitando enviar otro.");
                 return;
             } else {
-                await createLeadService(chatId);
-                await sendWelcomeMessage(client, chatId);
-                await sendContact(client, chatId);
+                let lead = await createLeadService(chatId);
+                if (lead) {
+                    await sendWelcomeMessage(client, chatId);
+                    await sendContact(client, chatId);
+                }
             }
         } catch (error) {
             console.error("Error al procesar el mensaje:", error);
