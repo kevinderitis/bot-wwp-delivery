@@ -108,7 +108,12 @@ const initializeClient = () => {
     client.on('qr', async (qr) => {
         qrData = qr;
         console.log(`Este es la data de qr: ${qrData}`);
-        await sendSlackMessage(`Server caido, leer nuevamente qr.`);
+        try {
+            await sendSlackMessage(`Server caido, leer nuevamente qr.`);
+        } catch (error) {
+            console.log(error);
+        }
+
     });
 
     client.on('ready', () => {
@@ -118,11 +123,16 @@ const initializeClient = () => {
     client.on('disconnected', async (reason) => {
         console.log('Cliente desconectado:', reason);
         const myNumber = client.info.wid._serialized;
-        if (reason === 'TOS_BLOCK' || reason === 'SMB_TOS_BLOCK') {
-            await sendSlackMessage(`Numero ${myNumber} bloqueado!`);
-        } else {
-            await sendSlackMessage(`Numero ${myNumber} desconectado!`);
+        try {
+            if (reason === 'TOS_BLOCK' || reason === 'SMB_TOS_BLOCK') {
+                await sendSlackMessage(`Numero ${myNumber} bloqueado!`);
+            } else {
+                await sendSlackMessage(`Numero ${myNumber} desconectado!`);
+            }
+        } catch (error) {
+            console.log(error);
         }
+
 
     });
 
