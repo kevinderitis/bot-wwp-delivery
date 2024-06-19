@@ -105,9 +105,10 @@ const sendLeadToClient = async (myClient, clientPhone, chatId) => {
 };
 
 const initializeClient = () => {
-    client.on('qr', (qr) => {
+    client.on('qr', async (qr) => {
         qrData = qr;
         console.log(`Este es la data de qr: ${qrData}`);
+        await sendSlackMessage(`Server caido, leer nuevamente qr.`);
     });
 
     client.on('ready', () => {
