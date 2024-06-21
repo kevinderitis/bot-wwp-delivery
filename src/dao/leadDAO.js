@@ -67,7 +67,6 @@ const getLeadByChatId = async (chatId) => {
     if (!lead) {
       console.log('Lead no encontrado');
     }
-    console.log('Lead encontrado por número de teléfono:', lead);
     return lead;
   } catch (error) {
     console.error('Error al obtener lead por número de teléfono:', error.message);
@@ -83,7 +82,6 @@ const updateLeadById = async (leadId, newData) => {
     if (!updatedLead) {
       throw new Error('Lead no encontrado');
     }
-    console.log('Lead actualizado:', updatedLead);
     return updatedLead;
   } catch (error) {
     console.error('Error al actualizar lead por ID:', error.message);
@@ -144,7 +142,6 @@ const updateLeadByChatId = async (chatId, status, newClientPhone) => {
 
     await lead.save();
 
-    console.log('Lead actualizado:', lead);
     return lead;
   } catch (error) {
     console.error('Error al actualizar lead por chatId:', error.message);

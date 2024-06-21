@@ -73,7 +73,7 @@ const sendWelcomeMessage = async (myClient, chatId) => {
             await updateLeadByChatId(chatId, 'sent', clientData.phoneNumber);
             await myClient.sendMessage(chatId, welcomeText);
             lastMessageChatId = chatId;
-
+            console.log(`Lead ${lead.chatId} enviado a: ${clientData.phoneNumber}`)
         }
         return clientData;
     } catch (error) {
