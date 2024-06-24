@@ -3,12 +3,13 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import pkg from 'whatsapp-web.js';
 import moment from 'moment-timezone';
-import { createLeadService, createResponse, formatNumber, getLeads } from './src/services/leadServices.js';
+import { createLeadService, createResponse, formatNumber, formatChatId, getLeads } from './src/services/leadServices.js';
 import ejs from 'ejs';
 import { getLeadByChatId, updateLeadByChatId, updateLeadById } from './src/dao/leadDAO.js';
 import { getNextClient } from './src/services/clientServices.js';
 import { sendSlackMessage } from './src/services/slackServices.js';
 import sendContactEventToFacebook from './src/services/facebookServices.js';
+import { initBot, sendContactTelegram } from './src/bot-telegram/telegram-bot.js';
 
 const { Client, MessageMedia } = pkg;
 
@@ -20,6 +21,8 @@ const __dirname = path.dirname(__filename);
 
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
+
+initBot();
 
 let qrData;
 
@@ -146,8 +149,14 @@ const initializeClient = () => {
             } else {
                 let lead = await createLeadService(chatId);
                 if (lead) {
+                    let leadNumber = formatChatId(chatId);
                     let clientData = await sendWelcomeMessage(client, chatId);
                     await sendContact(client, chatId);
+
+                    if (clientData.telegram) {
+                        await sendContactTelegram(leadNumber, clientData.telegram);
+                    }
+
                     // await sendContactEventToFacebook(chatId);
                     // await sendLeadToClient(client, clientData.phoneNumber, chatId);
                 }

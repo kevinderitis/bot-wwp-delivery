@@ -6,6 +6,11 @@ export const formatNumber = number => {
     return `${number}@c.us`;
 }
 
+export const formatChatId = chatId => {
+    let number = chatId.split("@")[0];
+    return number;
+}
+
 export const createResponse = async chatId => {
     let number;
     let response;
