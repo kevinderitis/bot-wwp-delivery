@@ -171,6 +171,32 @@ const initializeClient = () => {
 
 initializeClient();
 
+const processLead = async chatId => {
+    try {
+        console.log(`Se recibio mensaje de ${chatId}`);
+        if (lastMessageChatId === chatId) {
+            console.log("Ya se envió un mensaje a este número anteriormente. Evitando enviar otro.");
+            return;
+        } else {
+            let lead = await createLeadService(chatId);
+            if (lead) {
+                let leadNumber = formatChatId(chatId);
+                let clientData = await sendWelcomeMessage(client, chatId);
+                await sendContact(client, chatId);
+
+                if (clientData.telegram) {
+                    await sendContactTelegram(leadNumber, clientData.telegram);
+                }
+
+                // await sendContactEventToFacebook(chatId);
+                // await sendLeadToClient(client, clientData.phoneNumber, chatId);
+            }
+        }
+    } catch (error) {
+        console.error("Error al procesar el mensaje:", error);
+    }
+};
+
 app.get('/shutdown', async (req, res) => {
     try {
         await client.destroy();
@@ -212,6 +238,16 @@ app.get('/leads', async (req, res) => {
         res.status(500).send(error);
     }
 })
+
+app.post('/leads', async (req, res) => {
+    let chatId = req.body.chatId;
+    try {
+        let result = await processLead(chatId);
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
 
 app.get('/leads/all', async (req, res) => {
     try {
