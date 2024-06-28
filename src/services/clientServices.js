@@ -1,8 +1,9 @@
 import axios from 'axios';
+import config from '../config/config.js';
 
 export const getNextClient = async () => {
     try {
-        const response = await axios.get('https://leadsdelivery-2a9a11368067.herokuapp.com/lead/deliver');
+        const response = await axios.get(`${config.DELIVERY_LEADS_URL}/lead/deliver`);
         const clientData = response.data;
 
         return {
@@ -17,7 +18,7 @@ export const getNextClient = async () => {
 
 export const setTelegramChatId = async (chatId, userId) => {
     try {
-        const response = await axios.post('https://leadsdelivery-2a9a11368067.herokuapp.com/client/telegram', {
+        const response = await axios.post(`${config.DELIVERY_LEADS_URL}/client/telegram`, {
             telegramChatId: chatId,
             userId
         });
