@@ -26,8 +26,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// initBot();
-
 let qrData;
 
 app.get('/qr', async (req, res) => {
