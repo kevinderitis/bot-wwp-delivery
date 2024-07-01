@@ -9,20 +9,25 @@ import { getLeadByChatId, updateLeadByChatId, updateLeadById } from './src/dao/l
 import { getNextClient } from './src/services/clientServices.js';
 import { sendSlackMessage } from './src/services/slackServices.js';
 import sendContactEventToFacebook from './src/services/facebookServices.js';
-import { initBot, sendContactTelegram } from './src/bot-telegram/telegram-bot.js';
+// import { initBot, sendContactTelegram } from './src/bot-telegram/telegram-bot.js';
+import { bot, sendContactTelegram } from './src/bot-telegram/new-telegram-bot.js';
+import config from './src/config/config.js';
 
 const { Client, MessageMedia } = pkg;
 
 const app = express();
 const port = process.env.PORT || 3000;
+const tgToken = config.API_KEY_TELEGRAM;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-initBot();
+// initBot();
 
 let qrData;
 
@@ -59,7 +64,7 @@ let client = new Client({
     webVersionCache: {
         type: "remote",
         remotePath:
-            "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2413.51-beta.html",
+            "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.3000.1014580163-alpha.html",
     },
 });
 
@@ -218,7 +223,7 @@ app.get('/shutdown', async (req, res) => {
             webVersionCache: {
                 type: "remote",
                 remotePath:
-                    "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2413.51-beta.html",
+                    "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.3000.1014580163-alpha.html",
             }
         });
         initializeClient();
@@ -266,3 +271,9 @@ app.get('/leads/all', async (req, res) => {
         res.status(500).send(error);
     }
 })
+
+app.post(`/webhook/${tgToken}`, (req, res) => {
+    let body = req.body;
+    bot.processUpdate(body);
+    res.sendStatus(200);
+});
