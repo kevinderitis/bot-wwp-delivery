@@ -9,8 +9,7 @@ import { getLeadByChatId, updateLeadByChatId, updateLeadById } from './src/dao/l
 import { getNextClient } from './src/services/clientServices.js';
 import { sendSlackMessage } from './src/services/slackServices.js';
 import sendContactEventToFacebook from './src/services/facebookServices.js';
-// import { initBot, sendContactTelegram } from './src/bot-telegram/telegram-bot.js';
-import { bot, sendContactTelegram } from './src/bot-telegram/new-telegram-bot.js';
+import { bot, sendContactTelegram } from './src/bot-telegram/telegram-bot.js';
 import config from './src/config/config.js';
 
 const { Client, MessageMedia } = pkg;
