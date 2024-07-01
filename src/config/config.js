@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const config = {
+    APP_DOMAIN: process.env.APP_DOMAIN,
     PORT: process.env.PORT,
     MONGO_URL: process.env.MONGO_URL,
     SLACK_CHANNEL: process.env.SLACK_CHANNEL,
