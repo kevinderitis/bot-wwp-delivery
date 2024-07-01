@@ -55,11 +55,11 @@ let client = new Client({
             '--disable-gpu'
         ],
         // executablePath: process.env.CHROME_BIN || null
-    },
+    },  
     webVersionCache: {
         type: "remote",
         remotePath:
-            "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2413.51-beta.html",
+            "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.3000.1014587000-alpha.html",
     },
 });
 
@@ -218,7 +218,7 @@ app.get('/shutdown', async (req, res) => {
             webVersionCache: {
                 type: "remote",
                 remotePath:
-                    "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2413.51-beta.html",
+                    "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.3000.1014587000-alpha.html",
             }
         });
         initializeClient();
