@@ -139,8 +139,6 @@ const initializeClient = () => {
 
             const recentChats = sortedChats.slice(0, 20);
 
-            console.log(recentChats);
-
             for (const chat of recentChats) {
                 await processLead(chat.id._serialized);
             }
