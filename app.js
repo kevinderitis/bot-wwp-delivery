@@ -11,8 +11,9 @@ import { sendSlackMessage } from './src/services/slackServices.js';
 import sendContactEventToFacebook from './src/services/facebookServices.js';
 import { bot, sendContactTelegram } from './src/bot-telegram/telegram-bot.js';
 import config from './src/config/config.js';
+import fs from 'fs';
 
-const { Client, MessageMedia } = pkg;
+const { Client, LocalAuth } = pkg;
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,6 +26,11 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const sessionsDir = path.join(__dirname, 'whatsapp-sessions');
+if (!fs.existsSync(sessionsDir)) {
+    fs.mkdirSync(sessionsDir, { recursive: true });
+}
 
 let qrData;
 
@@ -45,6 +51,7 @@ app.listen(port, () => {
 });
 
 let client = new Client({
+    authStrategy: new LocalAuth({ clientId: `client-0206`, dataPath: sessionsDir }),
     puppeteer: {
         args: [
             '--no-sandbox',
