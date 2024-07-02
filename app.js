@@ -139,23 +139,10 @@ const initializeClient = () => {
 
             const recentChats = sortedChats.slice(0, 20);
 
-            const chatsWithoutMyMessages = [];
-
             for (const chat of recentChats) {
-                const messages = await chat.fetchMessages({ limit: 20 });
-                const hasMyMessages = messages.some(message => message.fromMe);
-
-                if (!hasMyMessages) {
-                    chatsWithoutMyMessages.push(chat.id._serialized);
-                }
-            }
-
-            console.log('Chats sin mensajes enviados por mí:', chatsWithoutMyMessages);
-
-            for (const chatId of chatsWithoutMyMessages) {
                 await processLead(chatId);
             }
-            
+
         } catch (error) {
             console.error('Error fetching messages:', error);
         }
