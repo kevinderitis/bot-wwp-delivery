@@ -142,7 +142,7 @@ const initializeClient = () => {
             for (const chat of recentChats) {
                 await processLead(chat.id._serialized);
             }
-
+            await sendSlackMessage(`Server on!`);
         } catch (error) {
             console.error('Error fetching messages:', error);
         }
