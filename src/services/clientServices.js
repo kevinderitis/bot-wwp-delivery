@@ -31,11 +31,11 @@ export const setTelegramChatId = async (chatId, userId) => {
     }
 }
 
-export const updateClientPhone = async (chatId, newPhone) => {
+export const updateClientPhone = async (chatId, phone) => {
     try {
         const response = await axios.post(`${config.DELIVERY_LEADS_URL}/client/user/phone`, {
             telegramChatId: chatId,
-            newPhone
+            phone
         }
         );
 
