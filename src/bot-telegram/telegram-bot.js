@@ -53,16 +53,20 @@ bot.onText(/\/user (\d+)/, async (msg, match) => {
 bot.onText(/\/lead (\d+)/, async (msg, match) => {
     const chatId = msg.chat.id;
     const command = msg.text.split(" ")[1];
+    console.log(command)
     try {
         let message;
 
         if (command === "start") {
+            console.log('start')
             await changeOrderState(command);
             message = "Se inició el envío de leads.";
         } else if (command === "stop") {
+            console.log('stop')
             await changeOrderState(command);
             message = "Se detuvo el envío de leads.";
         } else {
+            console.log('other')
             message = "El comando es desconocido, intenta con /lead stop o /lead start";
         }
 
