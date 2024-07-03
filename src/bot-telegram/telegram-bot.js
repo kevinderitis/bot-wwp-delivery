@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import config from '../config/config.js';
-import { setTelegramChatId } from '../services/clientServices.js';
+import { setTelegramChatId, updateClientPhone, changeOrderState } from '../services/clientServices.js';
 
 const token = config.API_KEY_TELEGRAM;
 
@@ -26,10 +26,16 @@ bot.onText(/\/start/, (msg) => {
     });
 });
 
-bot.onText(/\/number (\d+)/, (msg, match) => {
+bot.onText(/\/number (\d+)/, async (msg, match) => {
     const chatId = msg.chat.id;
-    const userId = msg.text.split(" ")[1];
-    bot.sendMessage(chatId, `Configuración para el usuario ID: ${userId}`);
+    const newNumber = msg.text.split(" ")[1];
+    try {
+        await updateClientPhone(chatId, newNumber);
+        bot.sendMessage(chatId, `Se cambio el numero de telefono: ${newNumber}`);
+    } catch (error) {
+        console.log(error);
+        bot.sendMessage(chatId, `Error al actualizar el numero`);
+    }
 });
 
 bot.onText(/\/user (\d+)/, async (msg, match) => {
@@ -44,10 +50,27 @@ bot.onText(/\/user (\d+)/, async (msg, match) => {
     }
 });
 
-bot.onText(/\/stop (\d+)/, (msg, match) => {
+bot.onText(/\/lead (\d+)/, async (msg, match) => {
     const chatId = msg.chat.id;
-    const userId = match[1];
-    bot.sendMessage(chatId, `Configuración para el usuario ID: ${userId}`);
+    const command = msg.text.split(" ")[1];
+    try {
+        let message;
+
+        if (command === "start") {
+            await changeOrderState(command);
+            message = "Se inició el envío de leads.";
+        } else if (command === "stop") {
+            await changeOrderState(command);
+            message = "Se detuvo el envío de leads.";
+        } else {
+            message = "El comando es desconocido, intenta con /lead stop o /lead start";
+        }
+
+        bot.sendMessage(chatId, message);
+    } catch (error) {
+        console.log(error);
+        bot.sendMessage(chatId, `Hubo un error al ejecutar el comando.`);
+    }
 });
 
 bot.on('message', (msg) => {

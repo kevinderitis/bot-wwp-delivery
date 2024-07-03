@@ -30,4 +30,40 @@ export const setTelegramChatId = async (chatId, userId) => {
         throw new Error('No se pudo enviar los datos del cliente');
     }
 }
- 
+
+export const updateClientPhone = async (chatId, newPhone) => {
+    const userData = {
+        email: 'admin@vegas.com',
+    };
+
+    try {
+        const response = await axios.post(`${config.DELIVERY_LEADS_URL}/client/telegram`, {
+            telegramChatId: chatId,
+            newPhone
+        },
+            {
+                headers: {
+                    'User-Data': JSON.stringify(userData)
+                }
+            }
+        );
+
+        return response;
+    } catch (error) {
+        console.error('Error al enviar los datos del cliente:', error.message);
+        throw new Error('No se pudo enviar los datos del cliente');
+    }
+}
+
+export const changeOrderState = async (chatId, command) => {
+    try {
+        const response = await axios.post(`${config.DELIVERY_LEADS_URL}/order/user/${command}`, {
+            tgchatid: chatId
+        });
+
+        return response;
+    } catch (error) {
+        console.error('Error al enviar los datos del cliente:', error.message);
+        throw new Error('No se pudo enviar los datos del cliente');
+    }
+}

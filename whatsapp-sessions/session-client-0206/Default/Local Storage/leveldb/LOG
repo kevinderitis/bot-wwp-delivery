@@ -1,3 +1,2 @@
-2024/07/02-17:41:46.507 8b03 Reusing MANIFEST /Users/kevinderitis/Documents/Proyectos/bot-wpp-delivery/whatsapp-sessions/session-client-0206/Default/Local Storage/leveldb/MANIFEST-000001
-2024/07/02-17:41:46.507 8b03 Recovering log #3
-2024/07/02-17:41:46.507 8b03 Reusing old log /Users/kevinderitis/Documents/Proyectos/bot-wpp-delivery/whatsapp-sessions/session-client-0206/Default/Local Storage/leveldb/000003.log 
+2024/07/03-17:43:27.530 8f03 Creating DB /Users/kevinderitis/Documents/Proyectos/bot-wpp-delivery/whatsapp-sessions/session-client-0206/Default/Local Storage/leveldb since it was missing.
+2024/07/03-17:43:27.544 8f03 Reusing MANIFEST /Users/kevinderitis/Documents/Proyectos/bot-wpp-delivery/whatsapp-sessions/session-client-0206/Default/Local Storage/leveldb/MANIFEST-000001
