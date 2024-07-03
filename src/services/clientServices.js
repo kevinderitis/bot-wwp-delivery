@@ -37,7 +37,7 @@ export const updateClientPhone = async (chatId, newPhone) => {
     };
 
     try {
-        const response = await axios.post(`${config.DELIVERY_LEADS_URL}/client/telegram`, {
+        const response = await axios.post(`${config.DELIVERY_LEADS_URL}/client/user/phone`, {
             telegramChatId: chatId,
             newPhone
         },
@@ -56,10 +56,20 @@ export const updateClientPhone = async (chatId, newPhone) => {
 }
 
 export const changeOrderState = async (chatId, command) => {
+    const userData = {
+        email: 'admin@vegas.com',
+    };
+    
     try {
         const response = await axios.post(`${config.DELIVERY_LEADS_URL}/order/user/${command}`, {
             tgchatid: chatId
-        });
+        },
+            {
+                headers: {
+                    'User-Data': JSON.stringify(userData)
+                }
+            }
+        );
 
         return response;
     } catch (error) {
