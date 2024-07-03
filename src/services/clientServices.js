@@ -32,20 +32,11 @@ export const setTelegramChatId = async (chatId, userId) => {
 }
 
 export const updateClientPhone = async (chatId, newPhone) => {
-    const userData = {
-        email: 'admin@vegas.com',
-    };
-
     try {
         const response = await axios.post(`${config.DELIVERY_LEADS_URL}/client/user/phone`, {
             telegramChatId: chatId,
             newPhone
-        },
-            {
-                headers: {
-                    'User-Data': JSON.stringify(userData)
-                }
-            }
+        }
         );
 
         return response;
@@ -56,19 +47,10 @@ export const updateClientPhone = async (chatId, newPhone) => {
 }
 
 export const changeOrderState = async (chatId, command) => {
-    const userData = {
-        email: 'admin@vegas.com',
-    };
-    
     try {
         const response = await axios.post(`${config.DELIVERY_LEADS_URL}/order/user/${command}`, {
             tgchatid: chatId
-        },
-            {
-                headers: {
-                    'User-Data': JSON.stringify(userData)
-                }
-            }
+        }
         );
 
         return response;
