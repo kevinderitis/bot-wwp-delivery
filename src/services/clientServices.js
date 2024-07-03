@@ -48,7 +48,6 @@ export const updateClientPhone = async (chatId, phone) => {
 
 export const changeOrderState = async (chatId, command) => {
     let url = `${config.DELIVERY_LEADS_URL}/order/user/${command}`;
-    console.log(url);
     try {
         const response = await axios.post(url, {
             tgchatid: chatId

@@ -59,11 +59,11 @@ bot.onText(/\/lead (start|stop)/, async (msg, match) => {
 
         if (command === "start") {
             console.log('start')
-            await changeOrderState(command);
+            await changeOrderState(chatId, command);
             message = "Se inició el envío de leads.";
         } else if (command === "stop") {
             console.log('stop')
-            await changeOrderState(command);
+            await changeOrderState(chatId, command);
             message = "Se detuvo el envío de leads.";
         } else {
             console.log('other')
