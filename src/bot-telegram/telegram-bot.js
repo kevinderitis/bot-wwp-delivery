@@ -50,7 +50,7 @@ bot.onText(/\/user (\d+)/, async (msg, match) => {
     }
 });
 
-bot.onText(/\/lead (\d+)/, async (msg, match) => {
+bot.onText(/\/lead (start|stop)/, async (msg, match) => {
     const chatId = msg.chat.id;
     const command = msg.text.split(" ")[1];
     console.log(command)
