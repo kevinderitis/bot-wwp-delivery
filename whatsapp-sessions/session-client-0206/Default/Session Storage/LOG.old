@@ -1,3 +1,2 @@
-2024/07/04-17:26:56.099 8d03 Reusing MANIFEST /Users/kevinderitis/Documents/Proyectos/bot-wpp-delivery/whatsapp-sessions/session-client-0206/Default/Session Storage/MANIFEST-000001
-2024/07/04-17:26:56.099 8d03 Recovering log #3
-2024/07/04-17:26:56.099 8d03 Reusing old log /Users/kevinderitis/Documents/Proyectos/bot-wpp-delivery/whatsapp-sessions/session-client-0206/Default/Session Storage/000003.log 
+2024/07/04-19:41:20.901 a403 Creating DB /Users/kevinderitis/Documents/Proyectos/bot-wpp-delivery/whatsapp-sessions/session-client-0206/Default/Session Storage since it was missing.
+2024/07/04-19:41:20.915 a403 Reusing MANIFEST /Users/kevinderitis/Documents/Proyectos/bot-wpp-delivery/whatsapp-sessions/session-client-0206/Default/Session Storage/MANIFEST-000001
