@@ -1,13 +1,24 @@
-2024/07/04-14:11:07.141 8603 Reusing MANIFEST /Users/kevinderitis/Documents/Proyectos/bot-wpp-delivery/whatsapp-sessions/session-client-0206/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2024/07/04-14:11:07.141 8603 Recovering log #47
-2024/07/04-14:11:07.150 8603 Reusing old log /Users/kevinderitis/Documents/Proyectos/bot-wpp-delivery/whatsapp-sessions/session-client-0206/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/000047.log 
-2024/07/04-14:11:07.151 8603 Delete type=2 #48
-2024/07/04-14:11:07.151 8603 Delete type=2 #45
-2024/07/04-14:11:08.715 f503 Level-0 table #52: started
-2024/07/04-14:11:08.724 f503 Level-0 table #52: 110547 bytes OK
-2024/07/04-14:11:08.733 f503 Delete type=0 #47
-2024/07/04-14:11:08.734 f503 Manual compaction at level-0 from '\x00\x1b\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x1c\x00\x00\x00' @ 0 : 0; will stop at (end)
-2024/07/04-14:11:09.952 8a03 Compacting 1@1 + 1@2 files
-2024/07/04-14:11:09.969 8a03 Generated table #53@1: 13312 keys, 414671 bytes
-2024/07/04-14:11:09.969 8a03 Compacted 1@1 + 1@2 files => 414671 bytes
-2024/07/04-14:11:09.977 8a03 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/07/04-17:28:50.356 f403 Reusing MANIFEST /Users/kevinderitis/Documents/Proyectos/bot-wpp-delivery/whatsapp-sessions/session-client-0206/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2024/07/04-17:28:50.356 f403 Recovering log #42
+2024/07/04-17:28:50.366 f403 Reusing old log /Users/kevinderitis/Documents/Proyectos/bot-wpp-delivery/whatsapp-sessions/session-client-0206/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/000042.log 
+2024/07/04-17:28:50.366 f403 Delete type=2 #35
+2024/07/04-17:28:50.366 f403 Delete type=2 #44
+2024/07/04-17:28:52.080 23d03 Level-0 table #48: started
+2024/07/04-17:28:52.093 23d03 Level-0 table #48: 126395 bytes OK
+2024/07/04-17:28:52.100 23d03 Delete type=0 #42
+2024/07/04-17:28:52.101 23d03 Manual compaction at level-0 from '\x00\x19\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x1a\x00\x00\x00' @ 0 : 0; will stop at (end)
+2024/07/04-17:28:52.103 1f403 Level-0 table #50: started
+2024/07/04-17:28:52.107 1f403 Level-0 table #50: 447 bytes OK
+2024/07/04-17:28:52.115 1f403 Delete type=0 #47
+2024/07/04-17:28:52.115 1f403 Manual compaction at level-0 from '\x00\x1a\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x1b\x00\x00\x00' @ 0 : 0; will stop at '\x00\x1a\x00\x00\x05' @ 52150 : 0
+2024/07/04-17:28:52.115 1f403 Compacting 1@0 + 1@1 files
+2024/07/04-17:28:52.124 1f403 Generated table #51@0: 3348 keys, 72023 bytes
+2024/07/04-17:28:52.124 1f403 Compacted 1@0 + 1@1 files => 72023 bytes
+2024/07/04-17:28:52.131 1f403 compacted to: files[ 0 1 1 0 0 0 0 ]
+2024/07/04-17:28:52.132 1f403 Delete type=2 #50
+2024/07/04-17:28:52.132 1f403 Manual compaction at level-0 from '\x00\x1a\x00\x00\x05' @ 52150 : 0 .. '\x00\x1b\x00\x00\x00' @ 0 : 0; will stop at (end)
+2024/07/04-17:28:53.414 f403 Compacting 1@1 + 1@2 files
+2024/07/04-17:28:53.428 f403 Generated table #52@1: 11594 keys, 352814 bytes
+2024/07/04-17:28:53.428 f403 Compacted 1@1 + 1@2 files => 352814 bytes
+2024/07/04-17:28:53.437 f403 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/07/04-17:28:53.437 f403 Delete type=2 #48

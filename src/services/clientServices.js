@@ -19,6 +19,17 @@ export const getNextClient = async () => {
     }
 }
 
+export const getClientInfo = async chatId => {
+    try {
+        const response = await axios.get(`${config.DELIVERY_LEADS_URL}/client/data/${chatId}`);
+        const clientData = response.data;
+        return clientData;
+    } catch (error) {
+        console.error('Error al obtener el próximo cliente:', error.message);
+        throw new Error('No se pudo obtener el próximo cliente');
+    }
+}
+
 export const setTelegramChatId = async (chatId, userId) => {
     try {
         const response = await axios.post(`${config.DELIVERY_LEADS_URL}/client/telegram`, {

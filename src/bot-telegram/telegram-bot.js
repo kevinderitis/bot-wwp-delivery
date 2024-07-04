@@ -1,7 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api';
 import config from '../config/config.js';
 import Bottleneck from 'bottleneck';
-import { setTelegramChatId, updateClientPhone, changeOrderState } from '../services/clientServices.js';
+import { setTelegramChatId, updateClientPhone, changeOrderState, getClientInfo } from '../services/clientServices.js';
 
 const token = config.API_KEY_TELEGRAM;
 
@@ -30,6 +30,20 @@ bot.onText(/\/start/, (msg) => {
             ],
         },
     });
+});
+
+bot.onText(/\/info/, async (msg) => {
+    const chatId = msg.chat.id;
+    try {
+        let info = await getClientInfo(chatId);
+        let phoneNumber = info ? info.phoneNumber : 'No configurado';
+        let remainingLeads = info ? info.remainingLeads : 'No hay ordenes activas';
+
+        bot.sendMessage(chatId, `Numero de telefono configurado: ${phoneNumber}\nCantidad restante de leads: ${remainingLeads}`);
+    } catch (error) {
+        console.log(error);
+        bot.sendMessage(chatId, `Error al obtener info`);
+    }
 });
 
 bot.onText(/\/number (\d+)/, async (msg, match) => {
