@@ -74,8 +74,6 @@ let client = new Client({
 
 let lastMessageChatId = "";
 
-const welcomeText = `¡Hola! 👋 ¿Estas listo para jugar? Para darte la mejor atención, tenés un cajero personal para hablar con vos. Acá te envío el numero. ¡Mucha suerte! 🍀`;
-
 const sendWelcomeMessage = async (myClient, chatId) => {
     try {
         let clientData;
@@ -83,7 +81,7 @@ const sendWelcomeMessage = async (myClient, chatId) => {
         if (lead && lead.status === 'pending') {
             clientData = await getNextClient();
             await updateLeadByChatId(chatId, 'sent', clientData.phoneNumber);
-            let welcomeMessage = clientData.welcomeMessage ? clientData.welcomeMessage : welcomeText;
+            let welcomeMessage = clientData.welcomeMessage;
             await myClient.sendMessage(chatId, welcomeMessage);
             lastMessageChatId = chatId;
             console.log(`Lead ${lead.chatId} enviado a: ${clientData.phoneNumber}`)

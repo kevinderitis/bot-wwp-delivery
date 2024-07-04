@@ -1,6 +1,8 @@
 import axios from 'axios';
 import config from '../config/config.js';
 
+const welcomeText = `¡Hola! 👋 ¿Estas listo para jugar? Para darte la mejor atención, tenés un cajero personal para hablar con vos. Acá te envío el numero. ¡Mucha suerte! 🍀`;
+
 export const getNextClient = async () => {
     try {
         const response = await axios.get(`${config.DELIVERY_LEADS_URL}/lead/deliver`);
@@ -9,7 +11,7 @@ export const getNextClient = async () => {
         return {
             phoneNumber: clientData.phoneNumber,
             telegram: clientData.telegram,
-            welcomeMessage: clientData.welcomeMessage
+            welcomeMessage: clientData.welcomeMessage || welcomeText
         };
     } catch (error) {
         console.error('Error al obtener el próximo cliente:', error.message);

@@ -1,5 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import config from '../config/config.js';
+import Bottleneck from 'bottleneck';
 import { setTelegramChatId, updateClientPhone, changeOrderState } from '../services/clientServices.js';
 
 const token = config.API_KEY_TELEGRAM;
@@ -7,6 +8,11 @@ const token = config.API_KEY_TELEGRAM;
 const domain = config.APP_DOMAIN;
 
 const bot = new TelegramBot(token, { polling: false });
+
+const limiter = new Bottleneck({
+    minTime: 1000 / 30,
+    maxConcurrent: 1,
+});
 
 const welcomeMessage = 'Bienvenidos al bot de Vegas Marketing. Vas a poder recibir los leads y modificar la configuración de tu cuenta por este medio. Necesitas el ID de usuario que te proporcionamos para asociar esta cuenta de telegram a tu cuenta de Vegas Marketing.';
 
@@ -58,15 +64,12 @@ bot.onText(/\/lead (start|stop)/, async (msg, match) => {
         let message;
 
         if (command === "start") {
-            console.log('start')
             await changeOrderState(chatId, command);
             message = "Se inició el envío de leads.";
         } else if (command === "stop") {
-            console.log('stop')
             await changeOrderState(chatId, command);
             message = "Se detuvo el envío de leads.";
         } else {
-            console.log('other')
             message = "El comando es desconocido, intenta con /lead stop o /lead start";
         }
 
@@ -95,22 +98,36 @@ bot.on('callback_query', (callbackQuery) => {
 
 bot.setWebHook(`${domain}/webhook/${token}`);
 
-export const sendContactTelegram = (phoneNumber, chatId) => {
+export const sendContactTelegram = async (phoneNumber, chatId) => {
     const firstName = "Contacto";
-    bot.sendContact(chatId, phoneNumber, firstName, {
-        vcard: `BEGIN:VCARD
-VERSION:3.0
-FN:${firstName}
-TEL;TYPE=CELL:${phoneNumber}
-END:VCARD`
-    });
 
-    const whatsappLink = `https://api.whatsapp.com/send/?phone=${phoneNumber}`;
-    const messageText = `Hablar por whatsapp: [Contactar](${whatsappLink})`;
+    const sendContact = async () => {
+        await bot.sendContact(chatId, phoneNumber, firstName, {
+            vcard: `BEGIN:VCARD
+                    VERSION:3.0
+                    FN:${firstName}
+                    TEL;TYPE=CELL:${phoneNumber}
+                    END:VCARD`
+        });
+    };
 
-    bot.sendMessage(chatId, messageText, { parse_mode: 'Markdown' }).catch((error) => {
-        console.error('Error al enviar el enlace de WhatsApp:', error);
-    });
+    const sendMessage = async () => {
+        const whatsappLink = `https://api.whatsapp.com/send/?phone=${phoneNumber}`;
+        const messageText = `Hablar por whatsapp: [Contactar](${whatsappLink})`;
+        await bot.sendMessage(chatId, messageText, { parse_mode: 'Markdown' });
+    };
+
+    try {
+        await limiter.schedule(sendContact);
+        await limiter.schedule(sendMessage);
+    } catch (error) {
+        console.error('Error al enviar el contacto o el enlace de WhatsApp:', error);
+        if (error.response && error.response.statusCode === 429) {
+            const retryAfter = parseInt(error.response.body.parameters.retry_after, 10) || 1;
+            console.log(`Retrying after ${retryAfter} seconds`);
+            setTimeout(() => sendContactTelegram(phoneNumber, chatId), retryAfter * 1000);
+        }
+    }
 };
 
 
